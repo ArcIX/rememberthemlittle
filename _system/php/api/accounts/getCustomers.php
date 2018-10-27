@@ -15,14 +15,19 @@ if (true);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         # Perform SQL Query
+        
         # Desired output: Account Name | Number of Bookings Made Since The Beginning | Total Cash Paid To RTL | Latest Pictorial Session | Next Pictorial Session
-        $sql = "SELECT a.account_name, COUNT(b.account_id) AS number_of_bookings, SUM(b.booking_total_price) AS total_expediture FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id GROUP BY a.account_id";
-        
+        # First 3 columns
+        # $sql = "SELECT a.account_name, COUNT(b.account_id) AS number_of_bookings, SUM(b.booking_total_price) AS total_expediture FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id GROUP BY a.account_id";
         # Get latest booking of each customer
-        # $sql = "SELECT MAX(b.booking_date) FROM accounts a LEFT JOIN bookings b WHERE b.booking_date < GETDATE() GROUP BY a.account_id"
+        # $sql = "SELECT a.account_name, MAX(b.booking_date) AS latest_booking FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id AND b.booking_date < GETDATE() GROUP BY a.account_id";
         # Get next booking of each customer
-        # $sql = "SELECT MIN(b.booking_date) FROM accounts a LEFT JOIN bookings b WHERE b.booking_date > GETDATE() GROUP BY a.account_id";
+        # $sql = "SELECT a.account_name, MIN(b.booking_date) AS next_booking FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id AND b.booking_date > GETDATE() GROUP BY a.account_id";
         
+        $sql = "SELECT x.account_name, x.number_of_bookings, x.total_expenditure, y.latest_booking, z.next_booking FROM (SELECT a.account_name, COUNT(b.account_id) AS number_of_bookings, SUM(b.booking_total_price) AS total_expenditure FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id GROUP BY a.account_id) x 
+            INNER JOIN (SELECT a.account_name, MAX(b.booking_date) AS latest_booking FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id AND b.booking_date < CURRENT_TIMESTAMP GROUP BY a.account_id) y ON x.account_name = y.account_name 
+            INNER JOIN (SELECT a.account_name, MIN(b.booking_date) AS next_booking FROM accounts a LEFT JOIN bookings b ON a.account_id = b.account_id AND b.booking_date > CURRENT_TIMESTAMP GROUP BY a.account_id) z ON y.account_name = z.account_name";
+
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         
