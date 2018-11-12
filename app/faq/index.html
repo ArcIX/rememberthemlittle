@@ -18,6 +18,59 @@
   <!-- Page Title -->
   <title>Remember Them Little</title>
 
+  <style>
+    #faqs-search {
+      width: 30%;
+      height: 40px;
+    }
+
+    #faqs-list {
+      width: 600px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      list-style-type: none;
+      max-width: 600px;
+      font-family: 'Courier New';
+      /*margin-bottom: 20px;*/
+    }
+
+    #faqs-question {
+      background-color: blue;
+      width: 100%;
+      height: auto;
+      /*line-height: 40px;*/
+      padding: 10px 40px 10px 8px;
+      /*position: relative;*/
+      color: #fff;
+      /*cursor: pointer;*/  
+    }
+
+    #faqs-answer {
+      background-color: aliceblue;
+      width: 100%;
+      height: 60px;
+      /*overflow: hidden;*/
+      /*background-color: #fff;
+      border: 10px solid #ec5366;
+      border-top: 0;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;*/
+      padding: 10px 40px 10px 8px;
+    }
+
+    /*slide up and down to show answer*/
+    .slide-vertical-enter-active#faqs-answer, .slide-vertical-leave-active#faqs-answer {
+      transition: all .3s ease-in-out;
+      opacity: 100;
+      height: 60px;   
+    }
+
+    .slide-vertical-enter#faqs-answer, .slide-vertical-leave-to#faqs-answer {
+      opacity: 0;
+      height: 0px;
+    }
+  </style>
 </head>
 
 <body>
@@ -82,15 +135,19 @@
 
     <main>
       
-      <input type="search" placeholder="Enter text to search for question...">
+      <input id="faqs-search" type="search" placeholder="Enter text to search for question...">
 
       <ul id="faqs-list">
-        <li id="faqs-question" v-for="(faq, index) in faqs" v-on:click="toggleFAQ(index)">
-          {{faq.question}}
-          <!--Insert an img tag here for expand icon-->
-          <div id="faqs-answer" v-show="faq.answerShown">
+        <li id="faqs-item" v-for="(faq, index) in faqs" v-bind:key="index">  
+        <div id="faqs-question" v-on:click="toggleFAQ(index)">
+            {{faq.question}}
+            <!--Insert an img tag here for expand icon-->
+        </div>
+        <transition name="slide-vertical" tag="p">
+            <div id="faqs-answer" v-show="faq.answerShown">
             {{faq.answer}}
-          </div>
+            </div>
+        </transition>
         </li>
       </ul>
 
