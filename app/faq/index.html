@@ -85,14 +85,19 @@
       <input type="search" placeholder="Enter text to search for question...">
 
       <ul id="faqs-list">
-        <li id="faqs-question" v-for="faq in faqs" v-on:click="faq.answerShown = !faq.answerShown">
+        <li id="faqs-question" v-for="(faq, index) in faqs" v-on:click="toggleFAQ(index)">
           {{faq.question}}
-          <!--Insert an img tag here for expand icon-->>
+          <!--Insert an img tag here for expand icon-->
           <div id="faqs-answer" v-show="faq.answerShown">
             {{faq.answer}}
           </div>
         </li>
       </ul>
+
+      <div id="contact-ribbon">
+        Got more questions?<br>
+        Email us at 123@rtl.com
+      </div>
 
     </main>
 
@@ -132,8 +137,8 @@
       },
       methods: {
           //unused as of now
-          toggleFAQ: function(answerShown) {
-            answerShown = !answerShown
+          toggleFAQ: function(question_number) {
+            this.faqs[question_number].answerShown = !this.faqs[question_number].answerShown
           }
       },
       mixins: [FacebookMixin]
