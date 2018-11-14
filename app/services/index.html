@@ -17,7 +17,59 @@
 
   <!-- Page Title -->
   <title>Remember Them Little</title>
+  
+  <style>
 
+    .services-main {
+      font-family: 'Proxima Soft';
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pictext-collection {
+      max-width: 800px;
+      max-height: 500px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      margin-bottom: 30px;
+    }
+
+    .pictext-container {
+      width: 800px;
+      height: 500px;
+      position: relative;
+    }
+
+    .pictext-container img {
+      width: 800px;
+      height: 500px;
+      position: relative;
+    }
+    
+    .pictext-container p {
+      position: absolute;
+      left: 30px;
+      bottom: 30px;
+    }
+
+    .why-choose-us {
+      margin: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .why-choose-us h2 {
+      margin: 20px;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -80,9 +132,19 @@
 
     </nav>
 
-    <main>
-
+    <main class="services-main">
       
+      <div class="pictext-collection" v-on:scroll="getScrollPosition()">
+        <div class="pictext-container" v-for="pictext in pictexts">
+          <img :src="pictext.image">
+          <p>{{pictext.text}}</p> <!--add v-show="scrollpos.x == ?" and place outside the current div-->
+        </div>
+      </div>
+
+      <div class="why-choose-us">
+        <h2>Why choose us?</h2>
+        <p>Remember them little lorem ipsum dolor</p>
+      </div>
 
     </main>
 
@@ -101,6 +163,27 @@
 
     var app = new Vue({
       el: '#app',
+      data: {
+        pictexts: [
+          {
+            image: '/_system/images/Screenshot from 2018-09-28 15-01-23.png',
+            text: 'Something to rememeber.'
+          },
+          {
+            image: '/_system/images/Screenshot from 2018-09-30 04.46.36.png',
+            text: 'Cherish them.'
+          },
+          {
+            image: '/_system/images/Screenshot from 2018-10-14 16-23-38.png',
+            text: 'While they are little...'
+          }
+        ]
+      },
+      methods: {
+        getScrollPosition: function() {
+          return 0;
+        }
+      },
       mixins: [FacebookMixin]
     })
 
