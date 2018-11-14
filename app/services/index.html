@@ -134,10 +134,10 @@
 
     <main class="services-main">
       
-      <div class="pictext-collection" v-on:scroll="getScrollPosition()">
-        <div class="pictext-container" v-for="pictext in pictexts">
-          <img :src="pictext.image">
-          <p>{{pictext.text}}</p> <!--add v-show="scrollpos.x == ?" and place outside the current div-->
+      <div class="pictext-collection">
+        <div class="pictext-container" v-for="(pictext, index) in pictexts">
+          <img :src="pictext.image" v-on:mouseover="toggleReveal(index)" v-on:mouseleave="toggleReveal(index)">
+          <p v-show="pictext.shouldReveal">{{pictext.text}}</p>
         </div>
       </div>
 
@@ -167,21 +167,26 @@
         pictexts: [
           {
             image: '/_system/images/Screenshot from 2018-09-28 15-01-23.png',
-            text: 'Something to rememeber.'
+            text: 'Something to rememeber.',
+            shouldReveal: false
           },
           {
             image: '/_system/images/Screenshot from 2018-09-30 04.46.36.png',
-            text: 'Cherish them.'
+            text: 'Cherish them.',
+            shouldReveal: false
           },
           {
             image: '/_system/images/Screenshot from 2018-10-14 16-23-38.png',
-            text: 'While they are little...'
+            text: 'While they are little...',
+            shouldReveal: false
           }
         ]
       },
+      computed: {
+      },
       methods: {
-        getScrollPosition: function() {
-          return 0;
+        toggleReveal: function(index) {
+          this.pictexts[index].shouldReveal = !this.pictexts[index].shouldReveal;
         }
       },
       mixins: [FacebookMixin]
@@ -191,5 +196,22 @@
 
 
 </body>
-
+<!--
+   :id="'pictext-container'+index"
+  setScrollX: function() {
+          this.scroll_x = this.$el.querySelector('.pictext-collection').scrollLeft;
+          console.log("Scroll: "+this.scroll_x);
+        },
+        shouldReveal: function(index) {
+          this.$nextTick(() => {
+            x_pos = this.$el.querySelector('#pictext-container'+index).offsetLeft - this.$el.querySelector('#pictext-container'+index).parentElement.offsetLeft;
+            console.log(index+" x_pos: "+x_pos);
+            console.log(x_pos == scrollX);
+            if(x_pos == scrollX) {
+              return true;
+            }
+            return false;
+          });
+        }
+-->
 </html>
